@@ -7,6 +7,8 @@ namespace AITelefonAssistent.Pages
     {
         private readonly ILogger<IndexModel> _logger;
 
+
+
         public IndexModel(ILogger<IndexModel> logger)
         {
             _logger = logger;
@@ -14,7 +16,7 @@ namespace AITelefonAssistent.Pages
 
         public void OnGet()
         {
-
+        
         }
     }
 }
