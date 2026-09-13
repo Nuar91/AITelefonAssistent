@@ -17,10 +17,14 @@ recognition.interimResults = false;
 
 
 
-
+// Das 'event' enthält ein großes Paket mit allen erkannten Text-Alternativen
 recognition.onresult = function (event) {
+    // Holt den wahrscheinlichsten Text (Index [0][0]) aus dem Paket heraus
     const text = event.results[0][0].transcript;
+
+    // Zeigt den gesprochenen Text live auf der Webseite an
     recognizedText.textContent = text;
+
     processUserInput(text);
 }
 function processUserInput(text) {
@@ -30,6 +34,12 @@ function processUserInput(text) {
         console.log("Der Benutzer möchte einen Termin.");
         assistantResponse.textContent = "Natürlich. Für welchen Tag?";
         speak("Natürlich. Für welchen Tag?");
+    }
+
+    if (text.includes("Wetter")) {
+        console.log("Der Benutzer fragt nach dem Wetter.");
+        assistantResponse.textContent = "Ich kann dir leider noch keine Wetterdaten geben.";
+        speak("Ich kann dir leider noch keine Wetterdaten geben.");
     }
 }
 

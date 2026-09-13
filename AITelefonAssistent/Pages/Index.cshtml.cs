@@ -1,3 +1,4 @@
+using AITelefonAssistent.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -7,16 +8,19 @@ namespace AITelefonAssistent.Pages
     {
         private readonly ILogger<IndexModel> _logger;
 
+        private readonly OllamaService _ollamaService;
 
-
-        public IndexModel(ILogger<IndexModel> logger)
+        public IndexModel(ILogger<IndexModel> logger,OllamaService ollamaService)
         {
             _logger = logger;
+            _ollamaService = ollamaService;
         }
 
-        public void OnGet()
+        public string Begruessung { get; private set; }
+
+        public async Task OnGetAsync()
         {
-        
+            Begruessung = await _ollamaService.GetModelsAsync();
         }
     }
 }

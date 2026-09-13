@@ -1,3 +1,5 @@
+
+using AITelefonAssistent.Services;
 namespace AITelefonAssistent
 {
     public class Program
@@ -8,6 +10,9 @@ namespace AITelefonAssistent
 
             // Add services to the container.
             builder.Services.AddRazorPages();
+
+            builder.Services.AddHttpClient();
+            builder.Services.AddScoped<OllamaService>();
 
             var app = builder.Build();
 
