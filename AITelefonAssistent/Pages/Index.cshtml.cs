@@ -20,7 +20,9 @@ namespace AITelefonAssistent.Pages
 
         public async Task OnGetAsync()
         {
-            Begruessung = await _ollamaService.GetModelsAsync();
+            //Begruessung = await _ollamaService.GetModelsAsync();
+
+            Begruessung = await _ollamaService.GetResponseAsync("Wie heiﬂt du?");
         }
     }
 }
