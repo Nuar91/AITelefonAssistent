@@ -6,51 +6,49 @@ const assistantResponse = document.getElementById("assistantResponse");
 const speech = window.speechSynthesis;
 const conversation = [];
 
+
+
+let isAssistantSpeaking = false;
+
 function speak(text) {
+    isAssistantSpeaking = true;
+
     const utterance = new SpeechSynthesisUtterance(text);
+
+    utterance.onend = function () {
+        isAssistantSpeaking = false;
+        recognition.start();
+    };
+
     speech.speak(utterance);
 }
 
-
 const recognition = new SpeechRecognition();
 recognition.lang = "de-DE";
-//recognition.continuous = false;
-recognition.continuous = true;
+recognition.continuous = false;
 recognition.interimResults = false;
 
 
 
 // Das 'event' enthält ein großes Paket mit allen erkannten Text-Alternativen
 recognition.onresult = function (event) {
-    // Holt den wahrscheinlichsten Text (Index [0][0]) aus dem Paket heraus
+
+    if (isAssistantSpeaking) {
+        return;
+    }
+
     const text = event.results[0][0].transcript;
 
-    // Zeigt den gesprochenen Text live auf der Webseite an
     recognizedText.textContent = text;
 
     processUserInput(text);
 }
 
-recognition.onend = function () {
-    recognition.start();
-};
 
 
 function processUserInput(text) {
     console.log("Benutzereingabe:", text);
-    /*
-    if (text.includes("Termin")) {
-        console.log("Der Benutzer möchte einen Termin.");
-        assistantResponse.textContent = "Natürlich. Für welchen Tag?";
-        speak("Natürlich. Für welchen Tag?");
-    }
-
-    if (text.includes("Wetter")) {
-        console.log("Der Benutzer fragt nach dem Wetter.");
-        assistantResponse.textContent = "Ich kann dir leider noch keine Wetterdaten geben.";
-        speak("Ich kann dir leider noch keine Wetterdaten geben.");
-    }
-    */
+    
 
     conversation.push({
         role: "user",
@@ -116,5 +114,5 @@ async function testChatEndpoint(text)
     speak(result);
 }
 
-// testChatEndpoint();
+
 
