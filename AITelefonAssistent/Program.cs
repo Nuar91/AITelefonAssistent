@@ -2,9 +2,20 @@
 using AITelefonAssistent.Services;
 using Microsoft.AspNetCore.Mvc;
 
+
+
+
+
 public class ChatRequest
 {
-    public string Message { get; set; }
+    //  public string Message { get; set; }
+    public List<ChatMessage> Messages { get; set; }
+}
+
+public class ChatMessage
+{
+    public string Role { get; set; }
+    public string Content { get; set; }
 }
 
 
@@ -51,7 +62,8 @@ namespace AITelefonAssistent
 
             app.MapPost("/api/chat", async ([FromBody] ChatRequest request, OllamaService ollamaService) =>
             {
-                string response = await ollamaService.GetResponseAsync(request.Message);
+             //   string response = await ollamaService.GetResponseAsync(request.Message);
+                string response = await ollamaService.GetResponseAsync(request.Messages);
 
                 return response;
             });

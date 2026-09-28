@@ -4,6 +4,7 @@ const status = document.getElementById("status");
 const recognizedText = document.getElementById("recognizedText");
 const assistantResponse = document.getElementById("assistantResponse");
 const speech = window.speechSynthesis;
+const conversation = [];
 
 function speak(text) {
     const utterance = new SpeechSynthesisUtterance(text);
@@ -13,7 +14,8 @@ function speak(text) {
 
 const recognition = new SpeechRecognition();
 recognition.lang = "de-DE";
-recognition.continuous = false;
+//recognition.continuous = false;
+recognition.continuous = true;
 recognition.interimResults = false;
 
 
@@ -28,9 +30,15 @@ recognition.onresult = function (event) {
 
     processUserInput(text);
 }
+
+recognition.onend = function () {
+    recognition.start();
+};
+
+
 function processUserInput(text) {
     console.log("Benutzereingabe:", text);
-
+    /*
     if (text.includes("Termin")) {
         console.log("Der Benutzer möchte einen Termin.");
         assistantResponse.textContent = "Natürlich. Für welchen Tag?";
@@ -42,6 +50,15 @@ function processUserInput(text) {
         assistantResponse.textContent = "Ich kann dir leider noch keine Wetterdaten geben.";
         speak("Ich kann dir leider noch keine Wetterdaten geben.");
     }
+    */
+
+    conversation.push({
+        role: "user",
+        content: text
+    });
+
+
+    testChatEndpoint(text);
 }
 
 startButton.addEventListener("click", async function () {
@@ -69,8 +86,9 @@ startButton.addEventListener("click", async function () {
     }
 });
 
-
-async function testChatEndpoint() {
+//async function testChatEndpoint()
+async function testChatEndpoint(text)
+{
     console.log("testChatEndpoint wurde gestartet.");
 
     const response = await fetch("/api/chat", {
@@ -79,11 +97,17 @@ async function testChatEndpoint() {
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
-            message: "Hallo"
+            //message: "Hallo"
+            // message: text
+            messages: conversation
         })
     });
 
     const result = await response.text();
+    conversation.push({
+        role: "assistant",
+        content: result
+    });
 
     console.log("Antwort vom Server:", result);
 
@@ -92,4 +116,5 @@ async function testChatEndpoint() {
     speak(result);
 }
 
-testChatEndpoint();
+// testChatEndpoint();
+

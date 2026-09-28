@@ -14,7 +14,7 @@ namespace AITelefonAssistent.Services
 
         public class OllamaResponse
         {
-            public OllamaMessage Message { get; set; }  
+            public OllamaMessage Message { get; set; }
         }
 
         public class OllamaMessage
@@ -23,35 +23,22 @@ namespace AITelefonAssistent.Services
         }
 
 
-       /* 
-       public async Task<string> GetModelsAsync()
-       {
-        HttpResponseMessage response = await _httpClient.GetAsync("/api/tags");
-
-            return await response.Content.ReadAsStringAsync();
-       }
-       */ 
-
-
         
-        public async Task<string> GetResponseAsync(string message)
+        public async Task<string> GetResponseAsync(List<ChatMessage> messages)
         {
-            var request = new{ model = "qwen3:8b", messages = new[]{ new {role = "user",content = message}},stream = false};// Im Gegensat zu Objekt response handelt es sich hier um ein anonymes Objekt, das die Anfrage an den Ollama-Server darstellt. 
-                                                                                                                            //Es enthält Informationen über das Modell, die Nachrichten und den Stream-Modus.
+            var request = new
+            {
+                model = "qwen3:8b",
+                messages = messages,
+                stream = false
+            };
 
-
-            HttpResponseMessage response = await _httpClient.PostAsJsonAsync("/api/chat", request);//api/chat bedeutet, dass es sich um eine Chat-Anfrage handelt,
-                                                                                                   //die an den Ollama-Server gesendet wird. Der Endpunkt /api/chat ist für die Verarbeitung von Chat-Nachrichten zuständig.
-
-            // return await response.Content.ReadAsStringAsync();
-
-
-
+            HttpResponseMessage response = await _httpClient.PostAsJsonAsync("/api/chat", request);
 
             OllamaResponse result = await response.Content.ReadFromJsonAsync<OllamaResponse>();
 
             return result.Message.Content;
         }
-        
+
     }
 }
