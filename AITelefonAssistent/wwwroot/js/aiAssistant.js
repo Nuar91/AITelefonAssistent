@@ -1,4 +1,5 @@
-﻿const startButton = document.getElementById("startButton");
+﻿console.log("aiAssistant.js wurde geladen.");
+const startButton = document.getElementById("startButton");
 const status = document.getElementById("status");
 const recognizedText = document.getElementById("recognizedText");
 const assistantResponse = document.getElementById("assistantResponse");
@@ -56,6 +57,7 @@ startButton.addEventListener("click", async function () {
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true});
 
         console.log("Stream:", stream);
+
         console.log("Mikrofon wurde freigegeben!");
 
         status.textContent = "Status: Mikrofon ist aktiv";
@@ -66,3 +68,24 @@ startButton.addEventListener("click", async function () {
         status.textContent = "Status: Mikrofon konnte nicht aktiviert werden.";
     }
 });
+
+
+async function testChatEndpoint() {
+    console.log("testChatEndpoint wurde gestartet.");
+
+    const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            message: "Hallo"
+        })
+    });
+
+    const result = await response.text();
+
+    console.log("Antwort vom Server:", result);
+}
+
+testChatEndpoint();
