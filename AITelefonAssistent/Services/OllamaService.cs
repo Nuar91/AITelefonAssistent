@@ -14,7 +14,7 @@ namespace AITelefonAssistent.Services
 
         public class OllamaResponse
         {
-            public OllamaMessage Message { get; set; }
+            public OllamaMessage Message { get; set; }  
         }
 
         public class OllamaMessage
@@ -43,7 +43,14 @@ namespace AITelefonAssistent.Services
             HttpResponseMessage response = await _httpClient.PostAsJsonAsync("/api/chat", request);//api/chat bedeutet, dass es sich um eine Chat-Anfrage handelt,
                                                                                                    //die an den Ollama-Server gesendet wird. Der Endpunkt /api/chat ist für die Verarbeitung von Chat-Nachrichten zuständig.
 
-            return await response.Content.ReadAsStringAsync();
+            // return await response.Content.ReadAsStringAsync();
+
+
+
+
+            OllamaResponse result = await response.Content.ReadFromJsonAsync<OllamaResponse>();
+
+            return result.Message.Content;
         }
         
     }

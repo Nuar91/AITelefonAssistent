@@ -86,6 +86,10 @@ async function testChatEndpoint() {
     const result = await response.text();
 
     console.log("Antwort vom Server:", result);
+
+    assistantResponse.textContent = result;
+
+    speak(result);
 }
 
 testChatEndpoint();
