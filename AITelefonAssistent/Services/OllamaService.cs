@@ -1,4 +1,4 @@
-﻿using System.Net.Http.Json;
+﻿
 
 namespace AITelefonAssistent.Services
 {
@@ -22,14 +22,23 @@ namespace AITelefonAssistent.Services
             public string Content { get; set; }
         }
 
-
-        
         public async Task<string> GetResponseAsync(List<ChatMessage> messages)
         {
+            ChatMessage systemMessage = new ChatMessage
+            {
+                Role = "system",
+                Content = "Du bist ein Telefonassistent. Antworte kurz und natürlich, wie in einem echten Telefongespräch. Verwende keine Emojis, kein Markdown und keine Aufzählungen. Vermeide unnötige Erklärungen und beschränke dich normalerweise auf höchstens zwei bis drei Sätze."
+            };
+
+            List<ChatMessage> allMessages = new List<ChatMessage>();
+
+            allMessages.Add(systemMessage);
+            allMessages.AddRange(messages);
+
             var request = new
             {
                 model = "qwen3:8b",
-                messages = messages,
+                messages = allMessages,
                 stream = false
             };
 
@@ -39,6 +48,5 @@ namespace AITelefonAssistent.Services
 
             return result.Message.Content;
         }
-
     }
 }

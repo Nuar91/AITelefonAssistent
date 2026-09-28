@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 public class ChatRequest
 {
-    //  public string Message { get; set; }
+    
     public List<ChatMessage> Messages { get; set; }
 }
 
@@ -53,12 +53,7 @@ namespace AITelefonAssistent
             app.MapRazorPages();
 
 
-            /*
-            app.MapPost("/api/chat", ([FromBody] ChatRequest request) =>
-            {
-                return request.Message;
-            });*/
-
+          
 
             app.MapPost("/api/chat", async ([FromBody] ChatRequest request, OllamaService ollamaService) =>
             {

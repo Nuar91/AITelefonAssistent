@@ -30,7 +30,7 @@ recognition.interimResults = false;
 
 
 
-// Das 'event' enthält ein großes Paket mit allen erkannten Text-Alternativen
+
 recognition.onresult = function (event) {
 
     if (isAssistantSpeaking) {
@@ -56,7 +56,7 @@ function processUserInput(text) {
     });
 
 
-    testChatEndpoint(text);
+    sendMessageToAssistant();
 }
 
 startButton.addEventListener("click", async function () {
@@ -84,10 +84,10 @@ startButton.addEventListener("click", async function () {
     }
 });
 
-//async function testChatEndpoint()
-async function testChatEndpoint(text)
+
+async function sendMessageToAssistant()
 {
-    console.log("testChatEndpoint wurde gestartet.");
+    console.log("sendMessageToAssistant wurde gestartet.");
 
     const response = await fetch("/api/chat", {
         method: "POST",
@@ -95,8 +95,7 @@ async function testChatEndpoint(text)
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
-            //message: "Hallo"
-            // message: text
+          
             messages: conversation
         })
     });
